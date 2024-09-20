@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "system.h": "c"
+    },
+    "clangd.arguments": [
+        "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-vscode-test/_build_mplab/MrHat/default/image_default.elf"
+    ],
+    "cmake.sourceDirectory": "/Users/emtszeb/work/ER/fw-mrhat-new"
+}
