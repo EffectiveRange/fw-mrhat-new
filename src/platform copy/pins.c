@@ -134,24 +134,24 @@ void PIN_MANAGER_Initialize(void)
     PIE3bits.IOCIE = 1; 
 }
   
-// void PIN_MANAGER_IOC(void)
-// {
-//     // interrupt on change for pin RTC_IRQ_N
-//     if(IOCAFbits.IOCAF2 == 1)
-//     {
-//         RTC_IRQ_N_ISR();  
-//     }
-//     // interrupt on change for pin PI_RUN
-//     if(IOCCFbits.IOCCF6 == 1)
-//     {
-//         PI_RUN_ISR();  
-//     }
-//     // interrupt on change for pin BQ_INT_N
-//     if(IOCCFbits.IOCCF7 == 1)
-//     {
-//         BQ_INT_N_ISR();  
-// }
-// }
+void PIN_MANAGER_IOC(void)
+{
+    // interrupt on change for pin RTC_IRQ_N
+    if(IOCAFbits.IOCAF2 == 1)
+    {
+        RTC_IRQ_N_ISR();  
+    }
+    // interrupt on change for pin PI_RUN
+    if(IOCCFbits.IOCCF6 == 1)
+    {
+        PI_RUN_ISR();  
+    }
+    // interrupt on change for pin BQ_INT_N
+    if(IOCCFbits.IOCCF7 == 1)
+    {
+        BQ_INT_N_ISR();  
+}
+}
    
 /**
    RTC_IRQ_N Interrupt Service Routine

@@ -2,8 +2,20 @@
     "files.associations": {
         "system.h": "c"
     },
+    "clangd.path": "clangd",
     "clangd.arguments": [
-        "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-vscode-test/_build_mplab/MrHat/default/image_default.elf"
+
+        // "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-vscode-test/_build_mplab/MrHat/default/image_default.elf"
+        "--compile-commands-dir=${workspaceFolder}/build/Debug",
+
+        // "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-new/build/Debug",
+        "-log=verbose", 
+        "-pretty", 
+        "--background-index", 
+                             
     ],
-    "cmake.sourceDirectory": "/Users/emtszeb/work/ER/fw-mrhat-new"
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+
+    "cmake.sourceDirectory": "/Users/emtszeb/work/ER/fw-mrhat-new",
+    "mplab.project.workspace.addNewSourceFiles": "Never"
 }

@@ -1,15 +1,14 @@
 /**
- * System Driver Source File
+ * System Driver Header File
  * 
- * @file system.c
+ * @file system.h
  * 
- * @ingroup systemdriver
+ * @defgroup systemdriver System Driver
  * 
- * @brief This file contains the API implementation for the System driver.
+ * @brief This is the generated header file for the System driver.
  *
  * @version Driver Version 1.0.1
 */
-
 /*
 ? [2024] Microchip Technology Inc. and its subsidiaries.
 
@@ -31,59 +30,35 @@
     THIS SOFTWARE.
 */
 
- /**
-   Section: Included Files
- */
-#include "system.h"
+#ifndef SYSTEM_H
+#define	SYSTEM_H
 
 /**
-  Section: Driver APIs
+  Section: Included Files
 */
+#include <xc.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "config_bits.h"
+#include "clock.h"
+#include "pins.h"
+#include "tmr0.h"
+#include "i2c1.h"
+#include "mvio.h"
+#include "pwm1_16bit.h"
+#include "tmr1.h"
+#include "interrupt.h"
 
-/** 
-* @ingroup systemdriver
-* @brief Initializes the CPU module.
-* @param None.
-* @return None.
+/**
+ * @ingroup systemdriver
+ * @brief Initializes the system module.
+ * This routine is called only once during system initialization, before calling other APIs.
+ * @param None.
+ * @return None.
 */
-void CPU_Initialize(void);
-void GPIO_Init(void);
-void SYSTEM_Initialize(void)
-{
-    CLOCK_Initialize();
-    GPIO_Init();
-    // PIN_MANAGER_Initialize();
-//    BQQON_Sampling_Initialize();
-    CPU_Initialize();
-//    I2C1_Host_Initialize();
-    MVIO_Initialize();
-    // PWM1_16BIT_Initialize();
-    Timer1_Initialize();
-    INTERRUPT_Initialize();
-}
+void SYSTEM_Initialize(void);
 
-void CPU_Initialize(void)
-{
-    //PRLOCKED unlocked; 
-    PRLOCK = 0x0;
-    //PR priority level 7; 
-    SCANPR = 0x7;
-    //PR priority level 7; 
-    DMA1PR = 0x7;
-    //PR priority level 7; 
-    DMA2PR = 0x7;
-    //PR priority level 7; 
-    DMA3PR = 0x7;
-    //PR priority level 7; 
-    DMA4PR = 0x7;
-    //PR priority level 7; 
-    MAINPR = 0x7;
-    //PR priority level 7; 
-    ISRPR = 0x7;
-    //PRODH undefined; 
-    PRODH = 0x0;
-    //PRODL undefined; 
-    PRODL = 0x0;
-}
-
-
+#endif	/* SYSTEM_H */
+/**
+ End of File
+*/

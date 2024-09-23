@@ -20,7 +20,7 @@
                 {
                     "name": "build",
                     "toolchain": "default-XC8",
-                    "imagePath": "./out/MrHat/default.elf"
+                    "imagePath": ".build/Debug/FW-MR-HAT.elf"
                 }
             ]
         }
