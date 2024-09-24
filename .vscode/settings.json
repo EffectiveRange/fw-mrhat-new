@@ -16,6 +16,6 @@
     ],
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
 
-    "cmake.sourceDirectory": "/Users/emtszeb/work/ER/fw-mrhat-new",
+    "cmake.sourceDirectory": "/workspaces/fw-mrhat-new",
     "mplab.project.workspace.addNewSourceFiles": "Never"
 }
