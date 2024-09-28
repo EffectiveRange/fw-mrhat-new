@@ -32,3 +32,6 @@ RUN chmod +x xc8-v2.50-full-install-linux-x64-installer.run
 RUN ./xc8-v2.50-full-install-linux-x64-installer.run --mode unattended  --unattendedmodeui none  --netservername host
 
 RUN apt-get clean &&  apt-get update --allow-insecure-repositories && sudo apt-get install -y --allow-unauthenticated ninja-build
+
+RUN apt-get clean &&  apt-get update --allow-insecure-repositories && sudo apt-get install -y --allow-unauthenticated clangd-16
+RUN sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-16 100

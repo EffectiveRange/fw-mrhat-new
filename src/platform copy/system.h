@@ -45,7 +45,7 @@
 #include "tmr0.h"
 #include "i2c1.h"
 #include "mvio.h"
-#include "pwm1_16bit.h"
+#include "plat_pwm.h"
 #include "tmr1.h"
 #include "interrupt.h"
 

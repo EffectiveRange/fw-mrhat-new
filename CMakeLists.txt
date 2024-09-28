@@ -73,6 +73,10 @@ set(sources_SRCS                    # Modified
     ${SRC_DIR}/timers.c
     ${SRC_DIR}/main.c
 
+
+    ${SRC_PLAT_DIR}/plat_gpio.c
+    ${SRC_PLAT_DIR}/plat_pwm.c
+    
     ${SRC_PLAT_DIR}/clock.c
     ${SRC_PLAT_DIR}/config_bits.c
     ${SRC_PLAT_DIR}/i2c1_client.c
@@ -80,8 +84,6 @@ set(sources_SRCS                    # Modified
     ${SRC_PLAT_DIR}/i2c1.c
     ${SRC_PLAT_DIR}/interrupt.c
     ${SRC_PLAT_DIR}/mvio.c
-    ${SRC_PLAT_DIR}/pins.c
-    ${SRC_PLAT_DIR}/pwm1_16bit.c
     ${SRC_PLAT_DIR}/system.c
     ${SRC_PLAT_DIR}/tmr0.c
     ${SRC_PLAT_DIR}/tmr1.c

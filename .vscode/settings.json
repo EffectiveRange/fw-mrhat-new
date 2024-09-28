@@ -6,7 +6,8 @@
     "clangd.arguments": [
 
         // "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-vscode-test/_build_mplab/MrHat/default/image_default.elf"
-        "--compile-commands-dir=${workspaceFolder}/build/Debug",
+        // "--compile-commands-dir=${workspaceFolder}/build/${cmake:BuildType}",
+        "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-new/build/Debug_Local",
 
         // "--compile-commands-dir=/Users/emtszeb/work/ER/fw-mrhat-new/build/Debug",
         "-log=verbose", 
@@ -16,6 +17,6 @@
     ],
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
 
-    "cmake.sourceDirectory": "/workspaces/fw-mrhat-new",
+    "cmake.sourceDirectory": "${workspaceFolder}",
     "mplab.project.workspace.addNewSourceFiles": "Never"
 }

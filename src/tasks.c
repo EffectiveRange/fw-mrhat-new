@@ -15,20 +15,19 @@ void TASKS_Initialize() {
     _has_task = 0;
 }
 
-void add_task(enum TASKS id, task_run_fun fn, void* state) {
+void add_task( TaskId id, task_run_fun fn, void* state) {
     const int diff = _tasks[id].task_fn == NULL || _tasks[id].suspended ? 1 : 0;
     _tasks[id].task_fn = fn;
     _tasks[id].task_state = state;
     _tasks[id].suspended = 0;
     _has_task += diff;
-
 }
 
-void resume_task(enum TASKS id) {
+void resume_task( TaskId id) {
     add_task(id, _tasks[id].task_fn, _tasks[id].task_state);
 }
 
-void rm_task(enum TASKS id) {
+void rm_task( TaskId id) {
     const int diff = _tasks[id].task_fn != NULL && _tasks[id].suspended == 0 ? 1 : 0;
     _tasks[id].task_fn = NULL;
     _tasks[id].task_state = NULL;
@@ -36,7 +35,7 @@ void rm_task(enum TASKS id) {
     _has_task -= diff;
 }
 
-void suspend_task(enum TASKS id) {
+void suspend_task( TaskId id) {
     if (_tasks[id].task_fn != NULL) {
         _tasks[id].suspended = 1;
         _has_task -= 1;

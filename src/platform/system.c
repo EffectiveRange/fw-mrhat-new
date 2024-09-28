@@ -51,11 +51,11 @@ void GPIO_Init(void);
 void SYSTEM_Initialize(void)
 {
     CLOCK_Initialize();
-    GPIO_Init();
+//     GPIO_Init();
     // PIN_MANAGER_Initialize();
-//    BQQON_Sampling_Initialize();
+   BQQON_Sampling_Initialize();
     CPU_Initialize();
-//    I2C1_Host_Initialize();
+   I2C1_Host_Initialize();
     MVIO_Initialize();
     // PWM1_16BIT_Initialize();
     Timer1_Initialize();

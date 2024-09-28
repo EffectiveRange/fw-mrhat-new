@@ -1,16 +1,41 @@
-CompileFlags:
+    #-std=c99,
+CompileFlags:                     # Tweak the parse settings
   Add: [
+    -I/Applications/microchip/xc8/v2.50/pic/include/,
+    -I/Applications/microchip/xc8/v2.50/pic/include/proc,
+    -I/Applications/microchip/xc8/v2.50/pic/include/c99,
     -I/Users/emtszeb/work/ER/fw-mrhat-new/src, 
     -I/Users/emtszeb/work/ER/fw-mrhat-new/src/platform, 
-    -I/Applications/microchip/xc8/v2.46/pic/include, 
-    -I/Applications/microchip/xc8/v2.46/pic/include/proc, 
-    -I/Applications/microchip/xc8/v2.46/pic/include/c99,
     -D __18CXX, 
     -D pic18f16q20,
-    -I/Applications/microchip/xc8/v2.46/pic/include, 
-    ]
-  Remove: [-fno-short-double, -fno-short-float, -fasmfile, -maddrqual=ignore, -xassembler-with-cpp, -mwarn=-3, -Wa,-a, -msummary=-psect,-class,+mem,-hex,-file, -ginhx32, -Wl,--data-init, -mno-keep-startup, -mno-download, -mno-default-config-bits, -mstack=compiled:auto:auto:auto,-march=*, -mabi=*, -mcpu=*, -msummary=*]
+    -D __XC8,
+    --include=/Applications/microchip/xc8/v2.50/pic/include/proc/pic18f16q20.h]        
+  
+  Remove: [ 
+    -fno-short-double, 
+    -fno-short-float, 
+    -fasmfile, 
+    -maddrqual=ignore, 
+    -xassembler-with-cpp, 
+    -mwarn=-3, 
+    -Wa,-a, 
+    -msummary=-psect,-class,+mem,-hex,-file, 
+    -ginhx32, 
+    -Wl,--data-init, 
+    -mno-keep-startup, 
+    -mno-download, 
+    -mno-default-config-bits, 
+    -mstack=*,
+    -march=*,
+    -mabi=*,
+    -mcpu=*,
+    -msummary=*,
+    -f*
+  ]
+
 Diagnostics:
-  Suppress: [pp_include_not_used, undeclared_var_use]
+  Suppress: [
+    pp_include_not_used, 
+    undeclared_var_use,
+    drv_unknown_argument]
   UnusedIncludes: None
-  MissingIncludes: None

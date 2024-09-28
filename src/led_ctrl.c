@@ -1,7 +1,7 @@
 
 #include "system.h"
 #include "led_ctrl.h"
-
+#include "plat_pwm.h"
 volatile int act_period = 50;
 volatile uint64_t next_period_update = 0;
 int dir=1;
@@ -19,12 +19,12 @@ uint16_t toggle_cnt = 0;
 uint8_t toggle_state = 0;
 
 
-void PWM_DutyCycleSetPercentage_Slice1(uint16_t current, uint16_t max, uint16_t periodCountTop)
-{
-    uint16_t PWM_DytyCyclePercentage = (uint16_t) ((1.0f - ((double) current / (double) max)) * periodCountTop);
-    PWM1_16BIT_SetSlice1Output1DutyCycleRegister(PWM_DytyCyclePercentage);
-    PWM1_16BIT_LoadBufferRegisters();
-}
+// void PWM_DutyCycleSetPercentage_Slice1(uint16_t current, uint16_t max, uint16_t periodCountTop)
+// {
+//     uint16_t PWM_DytyCyclePercentage = (uint16_t) ((1.0f - ((double) current / (double) max)) * periodCountTop);
+//     PWM1_16BIT_SetSlice1Output1DutyCycleRegister(PWM_DytyCyclePercentage);
+//     PWM1_16BIT_LoadBufferRegisters();
+// }
 uint16_t period_cnt =0;
 uint8_t led_pattern[] = {
     0,5,10,15,20,25,30,35,40,45, // 0-50:10
@@ -66,11 +66,11 @@ void LED_UpdateCallback(void){
             toggle_cnt=0;
             if(toggle_state){
                 toggle_state=0;
-                PWM_DutyCycleSetPercentage_Slice1(0,100,63999);
+                Plat_PWM_DutyCycleSetPercentage_Slice1(0);
 
             }else{
                 toggle_state=1;
-                PWM_DutyCycleSetPercentage_Slice1(100,100,63999);
+                Plat_PWM_DutyCycleSetPercentage_Slice1(100);
             }
         }
         toggle_cnt++;
@@ -82,8 +82,8 @@ void LED_UpdateCallback(void){
         if(act_pattern_cnt > act_pattern->len - 1){
             act_pattern_cnt=0;
         }
-        PWM_DutyCycleSetPercentage_Slice1(
-                (uint16_t) (act_pattern->pattern[act_pattern_cnt]),100,63999);
+        Plat_PWM_DutyCycleSetPercentage_Slice1(
+                (uint16_t) (act_pattern->pattern[act_pattern_cnt]));
 
         
         act_pattern_cnt++;
@@ -111,9 +111,9 @@ void LEDSetToggleTime(uint16_t period_ms){
 void LEDSetValue(uint8_t val){
     led_mode = LED_MODE_STATIC;
     if (val){
-        PWM_DutyCycleSetPercentage_Slice1(100,100,63999);
+        Plat_PWM_DutyCycleSetPercentage_Slice1(100);
 
     }else{
-        PWM_DutyCycleSetPercentage_Slice1(0,100,63999);
+        Plat_PWM_DutyCycleSetPercentage_Slice1(0);
     }
 }

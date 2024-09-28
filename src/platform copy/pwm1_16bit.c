@@ -36,7 +36,7 @@
  */
 
 #include <xc.h>
-#include "pwm1_16bit.h"
+#include "plat_pwm.h"
 
 //Pointers to PWM1_16BIT interrupt handlers
 //User can use them in application code to initialize with custom ISRs

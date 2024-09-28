@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-    enum TASKS {
+    typedef  enum{
         TASK_ONOFF = 0,
         TASK_I2C_WAKEUP,
         TASK_I2C_SWITCH_MODE,
@@ -27,7 +27,7 @@ extern "C" {
         TASK_CHECK_RTC,
         TASK_CHECK_BQ_IRQ,
         TASK_NUM
-    };
+    }TaskId;
 
     struct TaskDescr {
         void (*task_fn)(volatile struct TaskDescr*);
@@ -45,17 +45,17 @@ extern "C" {
     // The callback must not set or unset the callback pointer!
     // The only valid operation is to set to a different valid callback
     // The state pointer can be manipulated freely
-    void add_task(enum TASKS id, task_run_fun fn, void* state);
+    void add_task( TaskId id, task_run_fun fn, void* state);
 
     // Resume a suspended task
-    void resume_task(enum TASKS id);
+    void resume_task( TaskId id);
 
     // remove a task from scheduling
-    void rm_task(enum TASKS id);
+    void rm_task( TaskId id);
 
     // Suspend a task, this keeps the last valid state and callback
     // pointer intact
-    void suspend_task(enum TASKS id);
+    void suspend_task( TaskId id);
 
     // entry point from main thread
     void run_tasks(void);

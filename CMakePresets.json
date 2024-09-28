@@ -19,6 +19,14 @@
             }
         },
         {
+            "name": "Debug_Local",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "MP_CC_DIR": "/Applications/microchip/xc8/v2.50/"
+            }
+        },
+        {
             "name": "RelWithDebInfo",
             "inherits": "default",
             "cacheVariables": {
