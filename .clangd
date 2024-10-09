@@ -39,3 +39,5 @@ Diagnostics:
     undeclared_var_use,
     drv_unknown_argument]
   UnusedIncludes: None
+  Includes:
+    IgnoreHeader: ["pic18f16q20.h"]

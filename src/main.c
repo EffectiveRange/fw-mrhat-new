@@ -13,6 +13,7 @@
 #include "tasks.h"
 #include "timers.h"
 #include "pi_mgr.h"
+#include "i2c_regs_data.h"
 
 int main() {
     /**
@@ -42,8 +43,26 @@ int main() {
     //logic inits
     PI_RUN_MonitorInit();
     TASKS_Initialize();
+    I2CSwitchMode(I2C1_HOST_MODE);
+    PowMgrEnableDisableCharging();
+    while(1);
     while (1) {
         // timer test
+        REG_SET_SHUTDOWN_REQ();
+        REG_SET_SHUTDOWN_REQ() ;
+        REG_CLEAR_SHUTDOWN_REQ() ;
+        REG_IS_SHUTDOWN_REQ();
+        REG_SET_PI_HB_OK() ;
+        REG_CLEAR_PI_HB_OK() ;
+        REG_IS_PI_HB_OK() ;
+        REG_SET_BAT_AVAIL() ;
+        REG_CLEAR_BAT_AVAIL();
+        REG_IS_BAT_AVAIL() ;
+        REG_SET_BAT_CHECK_ERR() ;
+        REG_CLEAR_BAT_ERR();
+        REG_IS_BAT_CHECK_ERR() ;
+
+
     }
 
     while (1) {

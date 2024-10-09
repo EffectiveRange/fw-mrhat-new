@@ -4,6 +4,7 @@
 #include "system.h"
 #include "timers.h"
 
+int last_i2c_err  = 0;
 typedef enum { kI2C_Dummy, kI2C_Error, kI2C_Success } I2CState;
 
 volatile I2CState i2c_state = kI2C_Dummy;
@@ -100,10 +101,12 @@ void I2CSwitchMode(enum I2C1_Mode new_mode) {
 }
 
 static int I2CWriteImpl(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len) {
-  I2CSwitchMode(I2C1_HOST_MODE);
+ I2CSwitchMode(I2C1_HOST_MODE);
   int rc = 0;
+  
   // tx_buf: byte0-reg_addr, byte1:... data
   for (size_t i = 0; i < I2C_TRY_CNT; i++) {
+    bool tmout = false;
     uint64_t start_time_ms = GetTimeMs();
     i2c_state = kI2C_Dummy;
 
@@ -121,8 +124,12 @@ static int I2CWriteImpl(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len) {
         I2C1_BusReset();
         //                return -1;
         rc = -1;
+        tmout=true;
         break;
       }
+    }
+    if(tmout){
+        continue;
     }
     if (i2c_state == kI2C_Error) {
       I2C1_Close(); // todo remove
@@ -135,14 +142,16 @@ static int I2CWriteImpl(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len) {
     }
   }
 
-  I2CSwitchMode(I2C1_CLIENT_MODE);
+ I2CSwitchMode(I2C1_CLIENT_MODE);
+  last_i2c_err=rc;
   return rc;
 }
 
 static int I2CWriteReadImpl(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len,
                             uint8_t *rx_buf, size_t rx_len) {
-  I2CSwitchMode(I2C1_HOST_MODE);
+ I2CSwitchMode(I2C1_HOST_MODE);
   int rc = 0;
+  bool tmout = false;
   for (size_t i = 0; i < I2C_TRY_CNT; i++) {
     uint64_t start_time_ms = GetTimeMs();
     i2c_state = kI2C_Dummy;
@@ -162,8 +171,12 @@ static int I2CWriteReadImpl(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len,
         I2C1_BusReset();
         //                return -1;
         rc = -1;
+        tmout=true;
         break;
       }
+    }
+    if(tmout){
+        continue;
     }
     if (i2c_state == kI2C_Error) {
       I2C1_Close(); // todo remove
@@ -176,7 +189,9 @@ static int I2CWriteReadImpl(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len,
       break;
     }
   }
-  I2CSwitchMode(I2C1_CLIENT_MODE);
+ I2CSwitchMode(I2C1_CLIENT_MODE);
+  
+  last_i2c_err=rc;
   return rc;
 }
 

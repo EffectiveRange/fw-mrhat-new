@@ -26,6 +26,7 @@ extern "C" {
         TASK_WAKE_UP_PI,
         TASK_CHECK_RTC,
         TASK_CHECK_BQ_IRQ,
+        TASK_CHECK_BAT_AVAIL,
         TASK_NUM
     }TaskId;
 

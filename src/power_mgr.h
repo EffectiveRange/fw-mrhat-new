@@ -15,7 +15,7 @@ extern "C" {
 
     uint64_t GetTimeMs(void);
     void PowMgrSystemReset(volatile struct TaskDescr*);
-    int PowMgrEnableDisableCharging(void);
+    int PowMgrEnableDisableCharging(volatile struct TaskDescr* taskd);
     int PowMgrGoToShipMode(void);
     void DelayMS(uint32_t delay_ms);
     int PowMgrMesIBAT(void);

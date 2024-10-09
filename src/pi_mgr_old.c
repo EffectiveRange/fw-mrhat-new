@@ -90,7 +90,7 @@ void TaskPIMonitor(volatile struct TaskDescr* taskd){
     
     bool prev_pi_running = pi_running;
     if (GetTimeMs() > (pi_run_last_falling_time_ms+PI_RUN_HEARTBEAT_MAX_TIME_MS)){
-        SET_PI_HB_NOT_OK();
+        CLEAR_PI_HB_NOT_OK();
         pi_running=false;
     }else{
         SET_PI_HB_OK();
@@ -229,8 +229,8 @@ void TaskCheckRTC(volatile struct TaskDescr* taskd){
     uint8_t val;
     ret += I2CReadByte(0x32,0x1D, &val);
     if(!ret){
-        const bool af = GET_BITS(val,3);
-        const bool tf =  GET_BITS(val,4);
+        const bool af = GET_BIT(val,3);
+        const bool tf =  GET_BIT(val,4);
         if(af || tf){
             //wakeup PI
              add_task(TASK_WAKE_UP_PI, TaskWakeupPI, NULL);

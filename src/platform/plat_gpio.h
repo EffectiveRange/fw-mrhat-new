@@ -209,3 +209,45 @@ void Plat_GPIO_Register_PI_RUN_Callback(void (*callback)(void));
 #define I2C_SEL_N_SetOpenDrain()       do { ODCONCbits.ODCC4 = 1; } while(0)
 #define I2C_SEL_N_SetAnalogMode()      do { ANSELCbits.ANSELC4 = 1; } while(0)
 #define I2C_SEL_N_SetDigitalMode()     do { ANSELCbits.ANSELC4 = 0; } while(0)
+
+
+
+// get/set RB5 aliases
+#define SDA_TRIS                 TRISBbits.TRISB5
+#define SDA_LAT                  LATBbits.LATB5
+#define SDA_PORT                 PORTBbits.RB5
+#define SDA_WPU                  WPUBbits.WPUB5
+#define SDA_OD                   ODCONBbits.ODCB5
+#define SDA_ANS                  ANSELBbits.
+#define SDA_SetHigh()            do { LATBbits.LATB5 = 1; } while(0)
+#define SDA_SetLow()             do { LATBbits.LATB5 = 0; } while(0)
+#define SDA_Toggle()             do { LATBbits.LATB5 = ~LATBbits.LATB5; } while(0)
+#define SDA_GetValue()           PORTBbits.RB5
+#define SDA_SetDigitalInput()    do { TRISBbits.TRISB5 = 1; } while(0)
+#define SDA_SetDigitalOutput()   do { TRISBbits.TRISB5 = 0; } while(0)
+#define SDA_SetPullup()          do { WPUBbits.WPUB5 = 1; } while(0)
+#define SDA_ResetPullup()        do { WPUBbits.WPUB5 = 0; } while(0)
+#define SDA_SetPushPull()        do { ODCONBbits.ODCB5 = 0; } while(0)
+#define SDA_SetOpenDrain()       do { ODCONBbits.ODCB5 = 1; } while(0)
+#define SDA_SetAnalogMode()      do {  } while(0) //there is no ANSELBbits.ANSB5
+#define SDA_SetDigitalMode()     do {  } while(0) //there is no ANSELBbits.ANSB5
+
+// get/set RB6 aliases
+#define SCL_TRIS                 TRISBbits.TRISB6
+#define SCL_LAT                  LATBbits.LATB6
+#define SCL_PORT                 PORTBbits.RB6
+#define SCL_WPU                  WPUBbits.WPUB6
+#define SCL_OD                   ODCONBbits.ODCB6
+#define SCL_ANS                  ANSELBbits.
+#define SCL_SetHigh()            do { LATBbits.LATB6 = 1; } while(0)
+#define SCL_SetLow()             do { LATBbits.LATB6 = 0; } while(0)
+#define SCL_Toggle()             do { LATBbits.LATB6 = ~LATBbits.LATB6; } while(0)
+#define SCL_GetValue()           PORTBbits.RB6
+#define SCL_SetDigitalInput()    do { TRISBbits.TRISB6 = 1; } while(0)
+#define SCL_SetDigitalOutput()   do { TRISBbits.TRISB6 = 0; } while(0)
+#define SCL_SetPullup()          do { WPUBbits.WPUB6 = 1; } while(0)
+#define SCL_ResetPullup()        do { WPUBbits.WPUB6 = 0; } while(0)
+#define SCL_SetPushPull()        do { ODCONBbits.ODCB6 = 0; } while(0)
+#define SCL_SetOpenDrain()       do { ODCONBbits.ODCB6 = 1; } while(0)
+#define SCL_SetAnalogMode()      do { } while(0) //there is no ANSELBbits.ANSB6
+#define SCL_SetDigitalMode()     do {  } while(0) //there is no ANSELBbits.ANSB6

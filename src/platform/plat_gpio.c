@@ -1,4 +1,5 @@
 
+#include "platform copy/pins.h"
 #include "system.h"
 
 #include "plat_gpio.h"
@@ -117,4 +118,23 @@ void Plat_GPIO_Init(void) {
   I2C_SEL_N_SetDigitalMode();
   I2C_SEL_N_SetDigitalOutput();
   I2C_SEL_N_SetOpenDrain();
+
+  //SCL RB6 i2c clock output
+  SCL_SetDigitalMode();
+  SCL_SetDigitalOutput();
+  SCL_SetLow();
+  SCL_SetOpenDrain();
+  RB6FEAT = 0x21; //todo make it nicer
+  I2C1SCLPPS = 0xE;  //RB6->I2C1:SCL1;
+  RB6PPS = 0x1C;  //RB6->I2C1:SCL1;
+
+  //SDA RB5 i2c data 
+  SDA_SetDigitalMode();
+  SDA_SetDigitalOutput();
+  SDA_SetLow();
+  SDA_SetOpenDrain();
+  RB5FEAT = 0x21; //todo make it nicer
+  I2C1SDAPPS = 0xD;  //RB5->I2C1:SDA1;
+  RB5PPS = 0x1D;  //RB5->I2C1:SDA1;
+
 }

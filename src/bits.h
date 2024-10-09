@@ -17,7 +17,7 @@ extern "C" {
 #define CLEAR_BIT(x, pos) (x &= (~(1U<< pos)))
 #define TOGGLE_BIT(x, pos) x ^= (1U<< pos)
 #define CHECK_BIT(x, pos) (x & (1UL << pos) )
-#define GET_BITS(x, pos) ((x & ( 1 << pos)) >> pos)
+#define GET_BIT(x, pos) ((x & ( 1 << pos)) >> pos)
 
 
 #ifdef	__cplusplus
