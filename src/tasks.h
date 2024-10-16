@@ -7,7 +7,7 @@
 
 #ifndef TASKS_H
 #define	TASKS_H
-
+#include "system.h"
 #ifdef	__cplusplus
 extern "C" {
 #endif
@@ -22,7 +22,7 @@ extern "C" {
         TASK_POWER_IC_SYSTEM_RESET,
         TASK_PI_SHUTDOWN_OR_WAKEUP,
         TASK_PI_MONITOR,
-        TASK_SET_RESET_MCU_INT_PIN,
+        TASK_SET_MCU_INT_PIN,
         TASK_WAKE_UP_PI,
         TASK_CHECK_RTC,
         TASK_CHECK_BQ_IRQ,
@@ -30,12 +30,12 @@ extern "C" {
         TASK_NUM
     }TaskId;
 
-    struct TaskDescr {
-        void (*task_fn)(volatile struct TaskDescr*);
+    typedef struct TaskDescr{
+        void (*task_fn)(volatile  struct TaskDescr*);
         void* task_state;
         uint8_t suspended;
-    };
-    typedef void (*task_run_fun)(volatile struct TaskDescr*);
+    }TaskDescr;
+    typedef void (*task_run_fun)(volatile  TaskDescr*);
 
     void TASKS_Initialize(void);
 

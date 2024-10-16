@@ -1,11 +1,12 @@
 #include "system.h"
 
 void PIN_MANAGER_IOC(void);
-void Plat_GPIO_Init(void);
-void Plat_GPIO_Interrupt_Init(void);
-void Plat_GPIO_Register_RTC_IRQ_N_Callback(void (*callback)(void)) ;
-void Plat_GPIO_Register_BQ_INT_Callback(void (*callback)(void));
-void Plat_GPIO_Register_PI_RUN_Callback(void (*callback)(void));
+void GPIO_Init(void);
+void GPIO_Interrupt_Init(void);
+void GPIO_Register_RTC_IRQ_N_Callback(void (*callback)(void)) ;
+void GPIO_Register_BQ_INT_Callback(void (*callback)(void));
+void GPIO_Register_PI_RUN_Callback(void (*callback)(void));
+void GPIO_Register_BQ_QON_Callback(void (*callback)(void)) ;
 //portc 1 input rising edge
 #define BQ_QON_N_TRIS                 TRISCbits.TRISC1
 #define BQ_QON_N_LAT                  LATCbits.LATC1
@@ -25,6 +26,8 @@ void Plat_GPIO_Register_PI_RUN_Callback(void (*callback)(void));
 #define BQ_QON_N_SetOpenDrain()       do { ODCONCbits.ODCC1 = 1; } while(0)
 #define BQ_QON_N_SetAnalogMode()      do {  } while(0) //there is no ANSELCbits.ANSC1
 #define BQ_QON_N_SetDigitalMode()     do {  } while(0) //there is no ANSELCbits.ANSC1
+#define BQ_QON_N_EnableIOCNegativeEdge()     do { IOCCNbits.IOCCN1 = 1; } while(0) //enable negative edge interrup for Interrupt On Change module
+
 
 
 

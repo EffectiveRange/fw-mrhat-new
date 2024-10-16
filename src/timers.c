@@ -39,7 +39,7 @@ void MiliSecTimerOverflow(void) {
             timer_callbacks[i].act_value++;
             if (timer_callbacks[i].act_value >= timer_callbacks[i].period) {
                 timer_callbacks[i].act_value = 0;
-                timer_callbacks[i].task_cb(NULL);
+//                timer_callbacks[i].task_cb(NULL);
                 add_task(timer_callbacks[i].task_id, timer_callbacks[i].task_cb, NULL);
             }
         }

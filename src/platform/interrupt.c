@@ -3,7 +3,7 @@
 #include "interrupt.h"
 #include "system.h"
 #include <stdbool.h>
-#include "plat_gpio.h"
+#include "gpio.h"
 void (*INT0_InterruptHandler)(void);
 void (*INT1_InterruptHandler)(void);
 void (*INT2_InterruptHandler)(void);

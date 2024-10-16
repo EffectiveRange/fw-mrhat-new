@@ -1,7 +1,7 @@
 
 #include "system.h"
 #include "led_ctrl.h"
-#include "plat_pwm.h"
+#include "pwm.h"
 volatile int act_period = 50;
 volatile uint64_t next_period_update = 0;
 int dir=1;
@@ -66,11 +66,11 @@ void LED_UpdateCallback(void){
             toggle_cnt=0;
             if(toggle_state){
                 toggle_state=0;
-                Plat_PWM_DutyCycleSetPercentage_Slice1(0);
+                PWM_DutyCycleSetPercentage_Slice1(0);
 
             }else{
                 toggle_state=1;
-                Plat_PWM_DutyCycleSetPercentage_Slice1(100);
+                PWM_DutyCycleSetPercentage_Slice1(100);
             }
         }
         toggle_cnt++;
@@ -82,7 +82,7 @@ void LED_UpdateCallback(void){
         if(act_pattern_cnt > act_pattern->len - 1){
             act_pattern_cnt=0;
         }
-        Plat_PWM_DutyCycleSetPercentage_Slice1(
+        PWM_DutyCycleSetPercentage_Slice1(
                 (uint16_t) (act_pattern->pattern[act_pattern_cnt]));
 
         
@@ -111,9 +111,9 @@ void LEDSetToggleTime(uint16_t period_ms){
 void LEDSetValue(uint8_t val){
     led_mode = LED_MODE_STATIC;
     if (val){
-        Plat_PWM_DutyCycleSetPercentage_Slice1(100);
+        PWM_DutyCycleSetPercentage_Slice1(100);
 
     }else{
-        Plat_PWM_DutyCycleSetPercentage_Slice1(0);
+        PWM_DutyCycleSetPercentage_Slice1(0);
     }
 }

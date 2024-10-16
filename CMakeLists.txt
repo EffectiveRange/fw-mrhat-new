@@ -74,8 +74,8 @@ set(sources_SRCS                    # Modified
     ${SRC_DIR}/main.c
 
 
-    ${SRC_PLAT_DIR}/plat_gpio.c
-    ${SRC_PLAT_DIR}/plat_pwm.c
+    ${SRC_PLAT_DIR}/gpio.c
+    ${SRC_PLAT_DIR}/pwm.c
     
     ${SRC_PLAT_DIR}/clock.c
     ${SRC_PLAT_DIR}/config_bits.c

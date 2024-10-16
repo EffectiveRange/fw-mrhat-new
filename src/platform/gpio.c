@@ -1,15 +1,16 @@
 
-#include "platform copy/pins.h"
 #include "system.h"
 
-#include "plat_gpio.h"
-void Plat_GPIO_Interrupt_Init() {
+#include "gpio.h"
+void GPIO_Interrupt_Init() {
   // rtc
   RTC_IRQ_N_EnableIOCNegativeEdge();
   // bq int
   BQ_INT_EnableIOCNegativeEdge();
   // pirun
   PI_RUN_EnableIOCNegativeEdge();
+  //bq qon
+  BQ_QON_N_EnableIOCNegativeEdge();
 
   //enable peripheriel interrupe enable : IOC(interrupt on change) interrupt enable
   PIE3bits.IOCIE = 1;
@@ -20,14 +21,18 @@ typedef void (*void_cb_t)(void);
 void_cb_t RTC_IRQ_N_Callback = NULL;
 void_cb_t BQ_INT_Callback = NULL;
 void_cb_t PI_RUN_Callback = NULL;
-void Plat_GPIO_Register_RTC_IRQ_N_Callback(void (*callback)(void)) {
+void_cb_t BQ_QON_Callback = NULL;
+void GPIO_Register_RTC_IRQ_N_Callback(void (*callback)(void)) {
   RTC_IRQ_N_Callback = callback;
 }
-void Plat_GPIO_Register_BQ_INT_Callback(void (*callback)(void)) {
+void GPIO_Register_BQ_INT_Callback(void (*callback)(void)) {
   BQ_INT_Callback = callback;
 }
-void Plat_GPIO_Register_PI_RUN_Callback(void (*callback)(void)) {
+void GPIO_Register_PI_RUN_Callback(void (*callback)(void)) {
   PI_RUN_Callback = callback;
+}
+void GPIO_Register_BQ_QON_Callback(void (*callback)(void)) {
+  BQ_QON_Callback = callback;
 }
 void PIN_MANAGER_IOC(void) {
   // interrupt on change for pin RTC_IRQ_N
@@ -44,6 +49,13 @@ void PIN_MANAGER_IOC(void) {
     }
     IOCCFbits.IOCCF6 = 0;
   }
+  // interrupt on change for pin BQ_QON
+  if (IOCCFbits.IOCCF1 == 1) {
+    if (BQ_QON_Callback != NULL) {
+      BQ_QON_Callback();
+    }
+    IOCCFbits.IOCCF1 = 0;
+  }
   // interrupt on change for pin BQ_INT_N
   if (IOCCFbits.IOCCF7 == 1) {
     if (BQ_INT_Callback != NULL) {
@@ -53,7 +65,7 @@ void PIN_MANAGER_IOC(void) {
   }
 }
 
-void Plat_GPIO_Init(void) {
+void GPIO_Init(void) {
   /**
     SLRCONx registers
     set slew rate for all pins
@@ -81,7 +93,7 @@ void Plat_GPIO_Init(void) {
   RTC_IRQ_N_SetDigitalMode();
   RTC_IRQ_N_SetDigitalInput();
 
-  // BQ_INT_N open drain input
+  // BQ_INT_N RC7 open drain input
   BQ_INT_N_SetDigitalMode();
   BQ_INT_N_SetDigitalInput();
   BQ_INT_N_SetOpenDrain();

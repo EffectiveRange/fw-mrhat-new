@@ -2,7 +2,7 @@
 #include "system.h"
 #include "tasks.h"
 
-static volatile struct TaskDescr _tasks[TASK_NUM] = {};
+static volatile  TaskDescr _tasks[TASK_NUM] = {};
 static volatile int _has_task = 0;
 
 void TASKS_Initialize() {

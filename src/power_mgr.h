@@ -7,15 +7,15 @@
 
 #ifndef BAT_MGR_H
 #define	BAT_MGR_H
-
+#include "tasks.h"
 #ifdef	__cplusplus
 extern "C" {
 #endif
     #define BQ_I2C_ADDR (0x6b)
 
     uint64_t GetTimeMs(void);
-    void PowMgrSystemReset(volatile struct TaskDescr*);
-    int PowMgrEnableDisableCharging(volatile struct TaskDescr* taskd);
+    void PowMgrSystemReset(volatile  TaskDescr*);
+    void PowMgrEnableDisableCharging(volatile  TaskDescr* taskd);
     int PowMgrGoToShipMode(void);
     void DelayMS(uint32_t delay_ms);
     int PowMgrMesIBAT(void);

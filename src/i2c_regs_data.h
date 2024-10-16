@@ -11,6 +11,7 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+#include "system.h"
 #include "i2c_regs.h"
 #include "bits.h"
 #if 0

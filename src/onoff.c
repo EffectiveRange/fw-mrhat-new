@@ -170,7 +170,11 @@ static void DefaultHandler(enum ONOFFTypes type) {
 
 void ONOFF_Initialize() {
     //falling edge pin interrup handler
-    INT0_SetInterruptHandler(_start_bqqon_sampling);
+    // GPIO_Register_BQ_INT_Callback(_start_bqqon_sampling);
+    GPIO_Register_BQ_QON_Callback(_start_bqqon_sampling);
+    //todo set back int0 irq handlers for wake up functionality
+    // INT0_SetInterruptHandler(_start_bqqon_sampling);
+    //end todo
     
     //sampling timer irq handler
     BQQON_Sampling_OverflowCallbackRegister(_sample_bqqon);

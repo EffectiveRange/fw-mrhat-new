@@ -1,86 +1,97 @@
 #include "main.h"
 
+#include "gpio.h"
 #include "i2c1_multimode.h"
 #include "i2c_app.h"
 #include "i2c_regs_data.h"
 #include "led_ctrl.h"
 #include "onoff.h"
 #include "pi_mgr.h"
-#include "plat_gpio.h"
-#include "plat_pwm.h"
 #include "power_mgr.h"
+#include "pwm.h"
 #include "system.h"
 #include "tasks.h"
 #include "timers.h"
-#include "pi_mgr.h"
-#include "i2c_regs_data.h"
+
+
+void OnOffSwithcPressed(enum ONOFFTypes type) {
+    switch (type) {
+        case BTN_1L:
+            add_task(TASK_PI_SHUTDOWN_OR_WAKEUP,PIShutdownOrWakeup,NULL);
+            
+            break;
+        case BTN_1S_1L:
+            //wake up pi
+//            MCU_INT_N_SetHigh();
+//            if (I2C1_Current_Mode() == I2C1_HOST_MODE) {
+//                add_task(TASK_I2C_WAKEUP, read_device_id, regAddrBuff2);
+//            }
+//            I2C_SEL_N_Toggle();
+            break;
+        case BTN_1S_1S_1L:
+//            add_task(TASK_POWER_IC_SYSTEM_RESET,PowMgrSystemReset,NULL);
+            
+            break;
+    };
+
+}
 
 int main() {
+    // todo move them
     /**
     ANSELx registers
     */
     ANSELA = 0x3;
     ANSELB = 0x0;
     ANSELC = 0x0;
-    // inits
-    SYSTEM_Initialize();
-    Plat_GPIO_Init();
-    Plat_GPIO_Interrupt_Init();
-    Plat_PWM1_16BIT_Initialize();
+    // end todo
+
+    // platform inits
+    CLOCK_Initialize();
+    CPU_Initialize();
+    INTERRUPT_Initialize();
+    GPIO_Init();
+    GPIO_Interrupt_Init();
+    MVIO_Initialize();
+
+    //timers
+    BQQON_Sampling_Initialize();
+    Timer1_Initialize();
+    PWM1_16BIT_Initialize();
+
+    //comm
+    I2C1_Host_Initialize();
 
     // register GPIO callbacks
-    // Plat_GPIO_Register_RTC_IRQ_N_Callback(RTCPinChanged);
+    // GPIO_Register_RTC_IRQ_N_Callback(RTCPinChanged);
 
-    LEDSetPattern(&sleep_pattern);
-    Plat_PWM1_16BIT_Period_SetInterruptHandler(LED_UpdateCallback);
+    PWM1_16BIT_Period_SetInterruptHandler(LED_UpdateCallback);
 
     // 1msec freerunngin timer irq
     TMR1_OverflowCallbackRegister(MiliSecTimerOverflow);
-    I2C1_Multi_Initialize();
+    TASKS_Initialize();
+
     INTERRUPT_GlobalInterruptHighEnable();
     INTERRUPT_GlobalInterruptLowEnable();
 
-    //logic inits
+    // I2CSwitchMode(I2C1_HOST_MODE);
+
+    //
+    // logic inits
+    //
+    //led manager
+    LEDSetPattern(&sleep_pattern);
+    // pi monitor
     PI_RUN_MonitorInit();
-    TASKS_Initialize();
-    I2CSwitchMode(I2C1_HOST_MODE);
-    PowMgrEnableDisableCharging();
-    while(1);
-    while (1) {
-        // timer test
-        REG_SET_SHUTDOWN_REQ();
-        REG_SET_SHUTDOWN_REQ() ;
-        REG_CLEAR_SHUTDOWN_REQ() ;
-        REG_IS_SHUTDOWN_REQ();
-        REG_SET_PI_HB_OK() ;
-        REG_CLEAR_PI_HB_OK() ;
-        REG_IS_PI_HB_OK() ;
-        REG_SET_BAT_AVAIL() ;
-        REG_CLEAR_BAT_AVAIL();
-        REG_IS_BAT_AVAIL() ;
-        REG_SET_BAT_CHECK_ERR() ;
-        REG_CLEAR_BAT_ERR();
-        REG_IS_BAT_CHECK_ERR() ;
+    // power manager
+    PowMgrEnableDisableCharging(NULL);
+    // onoff button init
+    ONOFF_Initialize();
+    ONOFF_CallbackRegister(OnOffSwithcPressed);
 
-
-    }
-
-    while (1) {
-        // LEDSetValue(0x00);
-        // __delay_ms(500);
-        // LEDSetValue(1);
-        // __delay_ms(500);
-        // for (uint16_t i = 0 ; i< 100; i+=10){
-        //     //100*50 msec = 5 sec
-        //     Plat_PWM_DutyCycleSetPercentage_Slice1(i);
-        //     __delay_ms(100);
-        // }
-        // for (uint16_t i = 100 ; i>0; i-=10){
-        //     //100*50 msec = 5 sec
-        //     Plat_PWM_DutyCycleSetPercentage_Slice1(i);
-        //     __delay_ms(100);
-        // }
-    }
+        
+    run_tasks();
+    while (1);
 
 #if 0
     

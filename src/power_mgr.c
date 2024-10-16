@@ -1,4 +1,6 @@
 
+#include "system.h"
+#include "tasks.h"
 #include "power_mgr.h"
 
 #include "bits.h"
@@ -6,12 +8,11 @@
 #include "i2c_regs_data.h"
 #include "led_ctrl.h"
 #include "system.h"
-#include "tasks.h"
 #include "timers.h"
 
 extern volatile uint8_t CLIENT_DATA[];
 
-int PowMgrEnableDisableCharging(volatile struct TaskDescr* taskd) {
+void PowMgrEnableDisableCharging(volatile  TaskDescr* taskd) {
     uint8_t tx[2];
     uint8_t rx[2];
     uint8_t val8;
@@ -31,7 +32,7 @@ int PowMgrEnableDisableCharging(volatile struct TaskDescr* taskd) {
     }
 
     if (!GET_BIT(val8, 3)) {
-        return -1;
+        return;
     }
 
     // enable Force a battery discharging current (~30mA)
@@ -123,7 +124,7 @@ int PowMgrEnableDisableCharging(volatile struct TaskDescr* taskd) {
         REG_CLEAR_BAT_ERR();
     }
 
-    return ret;
+    return;
 }
 
 #if 0 
@@ -138,7 +139,7 @@ void ReadAll(void){
     
 }
 volatile int16_t ibat_signed=0;
-void PowMgrReadIBAT(volatile struct TaskDescr* taskd){
+void PowMgrReadIBAT(volatile  TaskDescr* taskd){
     uint8_t tx[2];
     uint8_t rx[2];
     int ret=0;
@@ -220,7 +221,7 @@ int PowMgrMesIBAT(){
 #endif
 
 #if 0
-void PowMgrSystemReset(volatile struct TaskDescr* taskd){
+void PowMgrSystemReset(volatile  TaskDescr* taskd){
     
     uint8_t tx[2];
     uint8_t rx[2];

@@ -26,7 +26,7 @@ typedef struct {
     bool enabled;
 } timer_callbact_t;
 
-typedef enum { TIMER_CB_PI_MONITOR, NUM_TIMER_CB } timer_cb_index_t;
+typedef enum { TIMER_CB_PI_MONITOR, TIMER_CB_WAKEUP_PI,NUM_TIMER_CB } timer_cb_index_t;
 timer_callbact_t timer_callbacks[NUM_TIMER_CB];
 
 void RegisterTimerCallback(task_run_fun task_cb, TaskId taskid,uint64_t period,

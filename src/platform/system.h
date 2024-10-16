@@ -41,11 +41,11 @@
 #include <stdbool.h>
 #include "config_bits.h"
 #include "clock.h"
-#include "plat_gpio.h"
+#include "gpio.h"
 #include "tmr0.h"
 #include "i2c1.h"
 #include "mvio.h"
-#include "plat_pwm.h"
+#include "pwm.h"
 #include "tmr1.h"
 #include "interrupt.h"
 
@@ -57,7 +57,7 @@
  * @return None.
 */
 void SYSTEM_Initialize(void);
-
+void CPU_Initialize(void);
 #endif	/* SYSTEM_H */
 /**
  End of File
