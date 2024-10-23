@@ -1,4 +1,5 @@
 
+#include "i2c1.h"
 #include "system.h"
 #include "tasks.h"
 #include "power_mgr.h"
@@ -24,14 +25,14 @@ void PowMgrEnableDisableCharging(volatile  TaskDescr* taskd) {
     for (i = 0; i < 10; i++) {
         // raead partid
         ret += I2CReadByte(BQ_I2C_ADDR, 0x38, &val8);
-        if (GET_BIT(val8, 3)) {
+        if (GET_BIT(val8, 3)!=0) {
             // partid is read
             break;
         }
         DelayMS(10);
     }
 
-    if (!GET_BIT(val8, 3)) {
+    if (GET_BIT(val8, 3)==0) {
         return;
     }
 
@@ -127,7 +128,7 @@ void PowMgrEnableDisableCharging(volatile  TaskDescr* taskd) {
     return;
 }
 
-#if 0 
+
 //2-56
 volatile uint8_t tx_all[2];
 volatile uint8_t rx_all[56];
@@ -142,15 +143,20 @@ volatile int16_t ibat_signed=0;
 void PowMgrReadIBAT(volatile  TaskDescr* taskd){
     uint8_t tx[2];
     uint8_t rx[2];
+    uint8_t val8;
+    uint8_t val16;
     int ret=0;
     
     //read ibat adc
     //REG0x1D_Charger_Status_0
     tx[0] = 0x1d;
-    ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
+     ret += I2CReadByte(BQ_I2C_ADDR, 0x1d, &val8);
+    // ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
     //todo do not check adc done
     // if (rx[0] & (1<<0){
-    if ((rx[0] & (1<<0)) || (rx[0] & (1<<6))){
+
+    // if ((rx[0] & (1<<0)) || (rx[0] & (1<<6))){
+    if ((GET_BIT(val8, 0)) || (GET_BIT(val8, 6))){
         
         //read ibat adc
         //REG0x2A_IBAT_ADC Register
@@ -162,63 +168,146 @@ void PowMgrReadIBAT(volatile  TaskDescr* taskd){
         LEDSetToggleTime(1000);
         
         //disable BQ irq handler
-        BQ_INT_N_SetInterruptHandler(NULL);
+        GPIO_Register_BQ_INT_Callback(NULL);
         
     }
     rm_task(TASK_CHECK_BQ_IRQ);   
 
     
 }
-void BQ_INT_PinChanged(){
+int read_ibat = 0;
+void BQ_INT_PinChanged(void){
     if(BQ_INT_N_GetValue()){
         //rising edge
         return;
     }
     //fallin edege
+    //todo remove moe
+//    PowMgrReadIBAT(NULL);
+    read_ibat=1;
     add_task(TASK_CHECK_BQ_IRQ,PowMgrReadIBAT,NULL);   
 }
 //Start IBAT ADC measurement
 volatile bool ibat_first_time=true;
 int PowMgrMesIBAT(){
-  
+  read_ibat=0;
     uint8_t tx[2];
     uint8_t rx[2];
+    uint8_t val8;
+    uint8_t val16;
+
     int ret=0;
     
     // reset watchdog
     //#REG0x16_Charger_Control_1 Register, 
     // BIT2 WATCHDOG reset
     tx[0]=0x16;
-    ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
-    tx[1] = rx[0] | (1<<2);
-    ret += I2CWrite(BQ_I2C_ADDR, tx, 2);
+    ret += I2CReadByte(BQ_I2C_ADDR, 0x16, &val8);
+    SET_BIT(val8, 2);  // BIT2 WATCHDOG reset
+    ret += I2CWriteByte(BQ_I2C_ADDR, 0x16, val8);
+
+    // ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
+    // tx[1] = rx[0] | (1<<2);
+    // ret += I2CWrite(BQ_I2C_ADDR, tx, 2);
     
     
     //REG0x27_ADC_Function_Disable_0 Registe
     //   bit6: IBAT_ADC_DIS , BAT ADC control
     //     0h = Enable (Default) 1h = Disable
     tx[0] = 0x27;
-    ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
-    tx[1] = rx[0] & (~(1<<6));
-    ret += I2CWrite(BQ_I2C_ADDR, tx, 2);
+    ret += I2CReadByte(BQ_I2C_ADDR, 0x27, &val8);
+    // ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
+    // tx[1] = rx[0] & (~(1<<6));
+    CLEAR_BIT(val8, 6);  // BIT6 IBAT_ADC_DIS
+    ret += I2CWriteByte(BQ_I2C_ADDR, 0x27, val8);
+
     
     
     //REG0x26_ADC_Control Register
     tx[0] = 0x26;
-    ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
+    ret += I2CReadByte(BQ_I2C_ADDR, 0x26, &val8);
+    // ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
     //set bits
     // bit7:ADC_EN=enable, bit3:running average, bit2:start new conversion
     //bit4:5 ADC_SAMPLE=3 (9bit)
     tx[1] = rx[0] | (1<<7) | (1<<3) | (1<<2) | (1<<4) | (1<<5); 
+    SET_BIT(val8, 7);  // BIT7 ADC_EN
+    SET_BIT(val8, 3);  // BIT3 running average
+    SET_BIT(val8, 2);  // BIT2 start new conversion
+    SET_BIT(val8, 4);  // BIT4 ADC_SAMPLE 9bit
+    SET_BIT(val8, 5);  // BIT5 ADC_SAMPLE 9bit
+
     //clear bits
     //bit6:ADC_RATE=0 (continous mes)
-    //bit4:5 ADC_SAMPLE=0 (12bit)
     tx[1] = tx[1] & (~(1<<6)); 
-    ret += I2CWrite(BQ_I2C_ADDR, tx, 2);
+    CLEAR_BIT(val8, 6);  // BIT6 ADC_RATE
+    ret += I2CWriteByte(BQ_I2C_ADDR, 0x26, val8);
+    // ret += I2CWrite(BQ_I2C_ADDR, tx, 2);
      
     return ret;
 }
-#endif
+
+int PowMgrMesIBATOneShot(){
+  read_ibat=0;
+    uint8_t tx[2];
+    uint8_t rx[2];
+    uint8_t val8;
+    uint8_t val16;
+
+    int ret=0;
+    
+    // reset watchdog
+    //#REG0x16_Charger_Control_1 Register, 
+    // BIT2 WATCHDOG reset
+    tx[0]=0x16;
+    ret += I2CReadByte(BQ_I2C_ADDR, 0x16, &val8);
+    SET_BIT(val8, 2);  // BIT2 WATCHDOG reset
+    ret += I2CWriteByte(BQ_I2C_ADDR, 0x16, val8);
+
+    
+    //REG0x27_ADC_Function_Disable_0 Registe
+    //   bit6: IBAT_ADC_DIS , BAT ADC control
+    //     0h = Enable (Default) 1h = Disable
+    tx[0] = 0x27;
+    ret += I2CReadByte(BQ_I2C_ADDR, 0x27, &val8);
+    // ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
+    // tx[1] = rx[0] & (~(1<<6));
+    CLEAR_BIT(val8, 6);  // BIT6 IBAT_ADC_DIS
+    ret += I2CWriteByte(BQ_I2C_ADDR, 0x27, val8);
+
+    
+    
+    //REG0x26_ADC_Control Register
+    tx[0] = 0x26;
+    ret += I2CReadByte(BQ_I2C_ADDR, 0x26, &val8);
+    // ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 1);
+    //set bits
+    // bit7:ADC_EN=enable, 
+    // bit3:running average, 
+    // bit2:start new conversion
+    // bit4:5 ADC_SAMPLE=3 (9bit)
+    tx[1] = rx[0] | (1<<7) | (1<<3) | (1<<2) | (1<<4) | (1<<5); 
+    SET_BIT(val8, 7);  // BIT7 ADC_EN
+    SET_BIT(val8, 6);  // BIT6 one shot value
+    CLEAR_BIT(val8, 3);  // BIT3 single value
+    SET_BIT(val8, 2);  // BIT2 start new conversion
+    SET_BIT(val8, 4);  // BIT4 ADC_SAMPLE 9bit
+    SET_BIT(val8, 5);  // BIT5 ADC_SAMPLE 9bit
+    ret += I2CWriteByte(BQ_I2C_ADDR, 0x26, val8);
+    
+    
+    DelayMS(100);
+    //read ibat adc
+    //REG0x2A_IBAT_ADC Register
+    tx[0] = 0x2A;
+    ret += I2CWriteRead(BQ_I2C_ADDR, tx,1, rx, 2);
+    CLIENT_DATA[REG_IBAT_ADDR] =rx[0];
+    CLIENT_DATA[REG_IBAT_ADDR+1] =rx[1];
+    ibat_signed = (int16_t)((uint16_t)(rx[1]<<8) | rx[0]);
+
+     
+    return ret;
+}
 
 #if 0
 void PowMgrSystemReset(volatile  TaskDescr* taskd){

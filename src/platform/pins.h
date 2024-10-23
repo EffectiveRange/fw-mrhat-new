@@ -230,25 +230,25 @@
 #define LED_0_SetAnalogMode()      do { ANSELCbits.ANSELC3 = 1; } while(0)
 #define LED_0_SetDigitalMode()     do { ANSELCbits.ANSELC3 = 0; } while(0)
 
-// get/set RC4 aliases
-#define I2C_SEL_N_TRIS                 TRISCbits.TRISC4
-#define I2C_SEL_N_LAT                  LATCbits.LATC4
-#define I2C_SEL_N_PORT                 PORTCbits.RC4
-#define I2C_SEL_N_WPU                  WPUCbits.WPUC4
-#define I2C_SEL_N_OD                   ODCONCbits.ODCC4
-#define I2C_SEL_N_ANS                  ANSELCbits.ANSELC4
-#define I2C_SEL_N_SetHigh()            do { LATCbits.LATC4 = 1; } while(0)
-#define I2C_SEL_N_SetLow()             do { LATCbits.LATC4 = 0; } while(0)
-#define I2C_SEL_N_Toggle()             do { LATCbits.LATC4 = ~LATCbits.LATC4; } while(0)
-#define I2C_SEL_N_GetValue()           PORTCbits.RC4
-#define I2C_SEL_N_SetDigitalInput()    do { TRISCbits.TRISC4 = 1; } while(0)
-#define I2C_SEL_N_SetDigitalOutput()   do { TRISCbits.TRISC4 = 0; } while(0)
-#define I2C_SEL_N_SetPullup()          do { WPUCbits.WPUC4 = 1; } while(0)
-#define I2C_SEL_N_ResetPullup()        do { WPUCbits.WPUC4 = 0; } while(0)
-#define I2C_SEL_N_SetPushPull()        do { ODCONCbits.ODCC4 = 0; } while(0)
-#define I2C_SEL_N_SetOpenDrain()       do { ODCONCbits.ODCC4 = 1; } while(0)
-#define I2C_SEL_N_SetAnalogMode()      do { ANSELCbits.ANSELC4 = 1; } while(0)
-#define I2C_SEL_N_SetDigitalMode()     do { ANSELCbits.ANSELC4 = 0; } while(0)
+// // get/set RC4 aliases
+// #define I2C_SEL_N_TRIS                 TRISCbits.TRISC4
+// #define I2C_SEL_N_LAT                  LATCbits.LATC4
+// #define I2C_SEL_N_PORT                 PORTCbits.RC4
+// #define I2C_SEL_N_WPU                  WPUCbits.WPUC4
+// #define I2C_SEL_N_OD                   ODCONCbits.ODCC4
+// #define I2C_SEL_N_ANS                  ANSELCbits.ANSELC4
+// #define I2C_SEL_N_SetHigh()            do { LATCbits.LATC4 = 1; } while(0)
+// #define I2C_SEL_N_SetLow()             do { LATCbits.LATC4 = 0; } while(0)
+// #define I2C_SEL_N_Toggle()             do { LATCbits.LATC4 = ~LATCbits.LATC4; } while(0)
+// #define I2C_SEL_N_GetValue()           PORTCbits.RC4
+// #define I2C_SEL_N_SetDigitalInput()    do { TRISCbits.TRISC4 = 1; } while(0)
+// #define I2C_SEL_N_SetDigitalOutput()   do { TRISCbits.TRISC4 = 0; } while(0)
+// #define I2C_SEL_N_SetPullup()          do { WPUCbits.WPUC4 = 1; } while(0)
+// #define I2C_SEL_N_ResetPullup()        do { WPUCbits.WPUC4 = 0; } while(0)
+// #define I2C_SEL_N_SetPushPull()        do { ODCONCbits.ODCC4 = 0; } while(0)
+// #define I2C_SEL_N_SetOpenDrain()       do { ODCONCbits.ODCC4 = 1; } while(0)
+// #define I2C_SEL_N_SetAnalogMode()      do { ANSELCbits.ANSELC4 = 1; } while(0)
+// #define I2C_SEL_N_SetDigitalMode()     do { ANSELCbits.ANSELC4 = 0; } while(0)
 
 // get/set RC5 aliases
 #define CHG_DISA_TRIS                 TRISCbits.TRISC5
@@ -311,6 +311,28 @@
 #define BQ_INT_N_SetAnalogMode()      do { ANSELCbits.ANSELC7 = 1; } while(0)
 #define BQ_INT_N_SetDigitalMode()     do { ANSELCbits.ANSELC7 = 0; } while(0)
 #define RC7_SetInterruptHandler  BQ_INT_N_SetInterruptHandler
+
+
+// get/set RC4 aliases
+#define PI_5V_DISA_TRIS                 TRISCbits.TRISC4
+#define PI_5V_DISA_LAT                  LATCbits.LATC4
+#define PI_5V_DISA_PORT                 PORTCbits.RC4
+#define PI_5V_DISA_WPU                  WPUCbits.WPUC4
+#define PI_5V_DISA_OD                   ODCONCbits.ODCC4
+#define PI_5V_DISA_ANS                  ANSELCbits.ANSELC4
+#define PI_5V_DISA_SetHigh()            do { LATCbits.LATC4 = 1; } while(0)
+#define PI_5V_DISA_SetLow()             do { LATCbits.LATC4 = 0; } while(0)
+#define PI_5V_DISA_Toggle()             do { LATCbits.LATC4 = ~LATCbits.LATC4; } while(0)
+#define PI_5V_DISA_GetValue()           PORTCbits.RC4
+#define PI_5V_DISA_SetDigitalInput()    do { TRISCbits.TRISC4 = 1; } while(0)
+#define PI_5V_DISA_SetDigitalOutput()   do { TRISCbits.TRISC4 = 0; } while(0)
+#define PI_5V_DISA_SetPullup()          do { WPUCbits.WPUC4 = 1; } while(0)
+#define PI_5V_DISA_ResetPullup()        do { WPUCbits.WPUC4 = 0; } while(0)
+#define PI_5V_DISA_SetPushPull()        do { ODCONCbits.ODCC4 = 0; } while(0)
+#define PI_5V_DISA_SetOpenDrain()       do { ODCONCbits.ODCC4 = 1; } while(0)
+#define PI_5V_DISA_SetAnalogMode()      do { ANSELCbits.ANSELC4 = 1; } while(0)
+#define PI_5V_DISA_SetDigitalMode()     do { ANSELCbits.ANSELC4 = 0; } while(0)
+
 
 /**
  * @ingroup  pinsdriver

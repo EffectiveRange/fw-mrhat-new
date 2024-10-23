@@ -19,6 +19,7 @@ extern "C" {
     int PowMgrGoToShipMode(void);
     void DelayMS(uint32_t delay_ms);
     int PowMgrMesIBAT(void);
+    void BQ_INT_PinChanged(void);
 
 #ifdef	__cplusplus
 }

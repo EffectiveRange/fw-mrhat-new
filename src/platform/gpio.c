@@ -1,4 +1,5 @@
 
+#include "pins.h"
 #include "system.h"
 
 #include "gpio.h"
@@ -126,10 +127,17 @@ void GPIO_Init(void) {
   CHG_DISA_SetOpenDrain();
   CHG_DISA_SetHigh();
 
-  // I2C_SEL_N RC4 output
-  I2C_SEL_N_SetDigitalMode();
-  I2C_SEL_N_SetDigitalOutput();
-  I2C_SEL_N_SetOpenDrain();
+  //PI_5V_DISA RC4
+  PI_5V_DISA_SetDigitalMode();
+  PI_5V_DISA_SetLow();
+  PI_5V_DISA_SetDigitalOutput();
+  PI_5V_DISA_SetPushPull();
+  
+
+  // // I2C_SEL_N RC4 output
+  // I2C_SEL_N_SetDigitalMode();
+  // I2C_SEL_N_SetDigitalOutput();
+  // I2C_SEL_N_SetOpenDrain();
 
   //SCL RB6 i2c clock output
   SCL_SetDigitalMode();
@@ -149,4 +157,19 @@ void GPIO_Init(void) {
   I2C1SDAPPS = 0xD;  //RB5->I2C1:SDA1;
   RB5PPS = 0x1D;  //RB5->I2C1:SDA1;
 
+
+  // GPIO_RA5 RA5 output
+  GPIO_RA5_SetDigitalMode();
+  GPIO_RA5_SetDigitalOutput();
+  GPIO_RA5_SetLow();
+
+  //IO_RA0 RA0 output
+  IO_RA0_SetDigitalMode();
+  IO_RA0_SetDigitalOutput();
+  IO_RA0_SetHigh();
+
+  //IO_RA1 RA1 output
+  IO_RA1_SetDigitalMode();
+  IO_RA1_SetDigitalOutput();
+  IO_RA1_SetHigh();
 }

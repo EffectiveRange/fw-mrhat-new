@@ -40,7 +40,7 @@ void PI_ChangeState(bool state) {
 static void PI_RUN_MonitorTimerCallback(volatile TaskDescr* taskd) {
     //rm myself
     rm_task(TASK_PI_MONITOR);
-
+    //if pi_run changed during the last monitoring period means the PI is running
     if(pi_run_changed){
         PI_ChangeState(true);
     }else{
@@ -49,13 +49,9 @@ static void PI_RUN_MonitorTimerCallback(volatile TaskDescr* taskd) {
     switch (pi_mon_state) {
         case PI_RUN_HB_INITIAL_DETECT:
             if (pi_run_changed) {
-                // go to normal state
-                // pi run on
-                // REG_SET_PI_HB_OK();
+             
             } else {
-                // pi run off
-                // do bat check
-                REG_CLEAR_PI_HB_OK();
+                //do init battery check
                 add_task(TASK_CHECK_BAT_AVAIL, PowMgrEnableDisableCharging,
                          NULL);
             }
@@ -67,13 +63,7 @@ static void PI_RUN_MonitorTimerCallback(volatile TaskDescr* taskd) {
 
             break;
         case PI_RUN_HB_NORMAL_MONITORING: {
-            // if (pi_run_changed) {
-            //     // everything ok
-            //     REG_SET_PI_HB_OK();
-            // } else {
-            //     // pi is not running
-            //     REG_CLEAR_PI_HB_OK();
-            // }
+           
             RegisterTimerCallback(&PI_RUN_MonitorTimerCallback, TASK_PI_MONITOR,
                                   PI_RUN_HB_NORMAL_MONITORING_TIME_MS,
                                   TIMER_CB_PI_MONITOR);
@@ -86,6 +76,7 @@ static void PI_RUN_MonitorTimerCallback(volatile TaskDescr* taskd) {
 void PI_RUN_MonitorInit(void) {
     //clear pi running by default
     REG_CLEAR_PI_HB_OK();
+    LEDSetPattern(&sleep_pattern);
 
     pi_run_changed = false;
 
@@ -154,7 +145,7 @@ void TaskWakeupPI(volatile struct TaskDescr* taskd){
 void SetMCU_INT_Pin(volatile  TaskDescr* taskd){
     //rm myself
     rm_task(TASK_SET_MCU_INT_PIN);
-    
+
     //SET MCU INT high
     MCU_INT_N_SetHigh();
 }
@@ -171,7 +162,7 @@ void PIShutdownOrWakeup(volatile  TaskDescr* taskd){
         MCU_INT_N_SetLow();
 
         RegisterTimerCallback(&SetMCU_INT_Pin, TASK_SET_MCU_INT_PIN,
-                              10000,
+                              1000,
                               TIMER_CB_WAKEUP_PI);
         EnableTimerCallback(TIMER_CB_WAKEUP_PI);
         

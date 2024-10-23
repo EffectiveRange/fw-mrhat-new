@@ -49,15 +49,19 @@ int main() {
     // platform inits
     CLOCK_Initialize();
     CPU_Initialize();
+    Timer1_Initialize();
     INTERRUPT_Initialize();
+    INTERRUPT_GlobalInterruptHighEnable();
+    INTERRUPT_GlobalInterruptLowEnable();
     GPIO_Init();
     GPIO_Interrupt_Init();
     MVIO_Initialize();
 
     //timers
     BQQON_Sampling_Initialize();
-    Timer1_Initialize();
+    
     PWM1_16BIT_Initialize();
+    
 
     //comm
     I2C1_Host_Initialize();
@@ -71,9 +75,8 @@ int main() {
     TMR1_OverflowCallbackRegister(MiliSecTimerOverflow);
     TASKS_Initialize();
 
-    INTERRUPT_GlobalInterruptHighEnable();
-    INTERRUPT_GlobalInterruptLowEnable();
-
+    
+    
     // I2CSwitchMode(I2C1_HOST_MODE);
 
     //
@@ -89,7 +92,28 @@ int main() {
     ONOFF_Initialize();
     ONOFF_CallbackRegister(OnOffSwithcPressed);
 
-        
+    extern int read_ibat;
+    void PowMgrReadIBAT(volatile  TaskDescr* taskd);
+    PI_5V_DISA_SetLow();//enable pi 
+   while(0){ 
+    MCU_INT_N_SetLow();
+    DelayMS(1000);
+    MCU_INT_N_SetHigh();
+    DelayMS(1000);
+//        PI_5V_DISA_SetHigh();
+////        GPIO_Register_BQ_INT_Callback(BQ_INT_PinChanged);
+//        PowMgrMesIBATOneShot();
+//        DelayMS(1000);
+////        PowMgrReadIBAT(NULL);
+////        if(read_ibat){
+////            PowMgrMesIBAT();
+////        }
+////        DelayMS(3000);
+////         PI_5V_DISA_SetLow();
+////        DelayMS(3000);
+//
+   }
+    
     run_tasks();
     while (1);
 
