@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   bat_mgr.h
  * Author: emtszeb
  *
@@ -6,24 +6,23 @@
  */
 
 #ifndef BAT_MGR_H
-#define	BAT_MGR_H
+#define BAT_MGR_H
 #include "tasks.h"
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
-    #define BQ_I2C_ADDR (0x6b)
+#define BQ_I2C_ADDR (0x6b)
 
-    uint64_t GetTimeMs(void);
-    void PowMgrSystemReset(volatile  TaskDescr*);
-    void PowMgrEnableDisableCharging(volatile  TaskDescr* taskd);
-    int PowMgrGoToShipMode(void);
-    void DelayMS(uint32_t delay_ms);
-    int PowMgrMesIBAT(void);
-    void BQ_INT_PinChanged(void);
-
-#ifdef	__cplusplus
+uint64_t GetTimeMs(void);
+void PowMgrSystemReset(volatile TaskDescr*);
+void PowMgrEnableDisableCharging(volatile TaskDescr* taskd);
+int PowMgrGoToShipMode(void);
+void PowMgrStartMesIBAT(volatile TaskDescr* taskd);
+void BQ_INT_PinChanged(void);
+void PowMgrReadIBAT(volatile TaskDescr* taskd) ;
+int PowMgrMesIBATOneShot(void);
+#ifdef __cplusplus
 }
 #endif
 
-#endif	/* BAT_MGR_H */
-
+#endif /* BAT_MGR_H */

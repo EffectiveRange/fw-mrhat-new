@@ -14,25 +14,6 @@ extern "C" {
 #include "system.h"
 #include "i2c_regs.h"
 #include "bits.h"
-#if 0
-#define SET_SHUTDOWN_REQ()  do { CLIENT_DATA[REG_STAT_0_ADDR] |= SHUT_REQ; } while(0);
-#define CLEAR_SHUTDOWN_REQ()  do { CLIENT_DATA[REG_STAT_0_ADDR] &= ~(SHUT_REQ) ; } while(0);
-#define IS_SHUTDOWN_REQ()  ((CLIENT_DATA[REG_STAT_0_ADDR] & SHUT_REQ_MASK) == SHUT_REQ)
-
-#define SET_PI_HB_OK()  do { CLIENT_DATA[REG_STAT_0_ADDR] |= PI_HB; } while(0);
-#define SET_PI_HB_NOT_OK()  do { CLIENT_DATA[REG_STAT_0_ADDR] &= ~(PI_HB) ; } while(0); 
-#define IS_PI_HB_OK()  ((CLIENT_DATA[REG_STAT_0_ADDR] & PI_HB_MASK) == PI_HB)
-#define IS_PI_HB_NOT_OK()  ((CLIENT_DATA[REG_STAT_0_ADDR] & PI_HB_MASK) == 0x0)
-
-#define SET_BAT_AVAIL()  do { CLIENT_DATA[REG_BAT_STAT_0_ADDR] |= (BAT_AVAIL); } while(0);
-#define CLEAR_BAT_AVAIL()  do { CLIENT_DATA[REG_BAT_STAT_0_ADDR] &= ~(BAT_AVAIL) ; } while(0);
-#define IS_BAT_AVAIL()  ((CLIENT_DATA[REG_BAT_STAT_0_ADDR] & BAT_AVAIL_MASK ) == (BAT_AVAIL))
-
-
-#define SET_BAT_CHECK_ERR()  do { CLIENT_DATA[REG_BAT_STAT_0_ADDR] |= BAT_CHECK_ERR; } while(0);
-#define CLEAR_BAT_ERR()  do { CLIENT_DATA[REG_BAT_STAT_0_ADDR] &=~(BAT_CHECK_ERR) ; } while(0);
-#define IS_BAT_CHECK_ERR()  ((CLIENT_DATA[REG_BAT_STAT_0_ADDR] & BAT_CHECK_ERR_MASK) == (BAT_CHECK_ERR))
-#else
 
 #define REG_SET_SHUTDOWN_REQ()  do {  SET_BIT (CLIENT_DATA[REG_STAT_0_ADDR] ,SHUT_REQ_POS); } while(0);
 #define REG_CLEAR_SHUTDOWN_REQ()  do {  CLEAR_BIT (CLIENT_DATA[REG_STAT_0_ADDR] ,SHUT_REQ_POS); } while(0);
@@ -53,8 +34,6 @@ extern "C" {
 #define REG_IS_BAT_CHECK_ERR()  ((GET_BIT(CLIENT_DATA[REG_BAT_STAT_0_ADDR] , BAT_CHECK_ERR_POS) == 1))
 
 
-
-#endif
 #define I2C_CLIENT_LOCATION_SIZE 20
     
 

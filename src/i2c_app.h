@@ -31,7 +31,6 @@ int I2CWriteReadWithPI(uint8_t dev_addr, uint8_t* tx_buf,size_t tx_len, uint8_t*
 //I2CWriteReadWithPi
 void I2CSwitchMode(enum I2C1_Mode new_mode);
 int I2CReadByte(uint8_t dev_addr, uint8_t reg_addr, uint8_t *dest) ;
-int I2CReadByteWithPI(uint8_t dev_addr, uint8_t reg_addr, uint8_t *dest);
 int I2CWriteByte(uint8_t dev_addr, uint8_t reg_addr, uint8_t val);
 int I2CWrite(uint8_t dev_addr, uint8_t *tx_buf, size_t tx_len);
 #ifdef	__cplusplus

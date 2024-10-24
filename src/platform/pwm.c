@@ -1,12 +1,16 @@
 #include "system.h"
 #include "pwm.h"
-
+#include "clock.h"
 typedef void (*void_cb_t)(void);
 
 void_cb_t PWM1_16BIT_Slice1Output1_InterruptHandler=NULL;
 void_cb_t PWM1_16BIT_Slice1Output2_InterruptHandler=NULL;
 void_cb_t PWM1_16BIT_Period_InterruptHandler=NULL;
-#define PWM_CLOCK 64000 // 64KHz
+#if _XTAL_FREQ == 64000000
+    #define PWM_CLOCK 64000 // 64KHz
+#elif _XTAL_FREQ == 1000000
+    #define PWM_CLOCK 1000 // 1KHz
+#endif
 void PWM_DutyCycleSetPercentage_Slice1(uint16_t duty_cycle)
 {
     uint16_t PWM_DytyCyclePercentage = (uint16_t) ((1.0f - ((double) duty_cycle / (double) 100.)) * (PWM_CLOCK-1));
@@ -24,48 +28,91 @@ void PWM1_16BIT_Initialize(void)
 
 
     //init pwm regs
-    //PWMERS External Reset Disabled; 
-    PWM1ERS = 0x0;
+    #if _XTAL_FREQ == 64000000
+        //PWMERS External Reset Disabled; 
+        PWM1ERS = 0x0;
 
-    //PWMCLK FOSC; 
-    PWM1CLK = 0x2;
+        //PWMCLK FOSC; 
+        PWM1CLK = 0x2;
 
-    //PWMLDS Autoload disabled; 
-    PWM1LDS = 0x0;
+        //PWMLDS Autoload disabled; 
+        PWM1LDS = 0x0;
 
-    //PWMPRL 255; 
-    PWM1PRL = 0xFF;
+        //PWMPRL 255; 
+        PWM1PRL = 0xFF;
 
-    //PWMPRH 249; 
-    PWM1PRH = 0xF9;
+        //PWMPRH 249; 
+        PWM1PRH = 0xF9;
 
-    //PWMCPRE No prescale; 
-    PWM1CPRE = 0x0;
+        //PWMCPRE No prescale; 
+        PWM1CPRE = 0x0;
 
-    //PWMPIPOS No postscale; 
-    PWM1PIPOS = 0x0;
+        //PWMPIPOS No postscale; 
+        PWM1PIPOS = 0x0;
 
-    //PWMS1P1IF PWM1 output match did not occur; PWMS1P2IF PWM2 output match did not occur; 
-    PWM1GIR = 0x0;
+        //PWMS1P1IF PWM1 output match did not occur; PWMS1P2IF PWM2 output match did not occur; 
+        PWM1GIR = 0x0;
 
-    //PWMS1P1IE disabled; PWMS1P2IE disabled; 
-    PWM1GIE = 0x0;
+        //PWMS1P1IE disabled; PWMS1P2IE disabled; 
+        PWM1GIE = 0x0;
 
-    //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Left aligned mode; 
-    PWM1S1CFG = 0x0;
+        //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Left aligned mode; 
+        PWM1S1CFG = 0x0;
 
-    //PWMS1P1L 0; 
-    PWM1S1P1L = 0x0;
+        //PWMS1P1L 0; 
+        PWM1S1P1L = 0x0;
 
-    //PWMS1P1H 250; 
-    PWM1S1P1H = 0xFA;
+        //PWMS1P1H 250; 
+        PWM1S1P1H = 0xFA;
 
-    //PWMS1P2L 128; 
-    PWM1S1P2L = 0x80;
+        //PWMS1P2L 128; 
+        PWM1S1P2L = 0x80;
 
-    //PWMS1P2H 2; 
-    PWM1S1P2H = 0x2;
-    
+        //PWMS1P2H 2; 
+        PWM1S1P2H = 0x2;
+    #elif _XTAL_FREQ == 1000000
+        //PWMERS External Reset Disabled; 
+        PWM1ERS = 0x0;
+
+        //PWMCLK FOSC; 
+        PWM1CLK = 0x2;
+
+        //PWMLDS Autoload disabled; 
+        PWM1LDS = 0x0;
+
+        //PWMPRL 231; 
+        PWM1PRL = 0xE7;
+
+        //PWMPRH 3; 
+        PWM1PRH = 0x3;
+
+        //PWMCPRE No prescale; 
+        PWM1CPRE = 0x0;
+
+        //PWMPIPOS No postscale; 
+        PWM1PIPOS = 0x0;
+
+        //PWMS1P1IF PWM1 output match did not occur; PWMS1P2IF PWM2 output match did not occur; 
+        PWM1GIR = 0x0;
+
+        //PWMS1P1IE disabled; PWMS1P2IE disabled; 
+        PWM1GIE = 0x0;
+
+        //PWMPOL1 disabled; PWMPOL2 disabled; PWMPPEN disabled; PWMMODE Left aligned mode; 
+        PWM1S1CFG = 0x0;
+
+        //PWMS1P1L 232; 
+        PWM1S1P1L = 0xE8;
+
+        //PWMS1P1H 3; 
+        PWM1S1P1H = 0x3;
+
+        //PWMS1P2L 10; 
+        PWM1S1P2L = 0xA;
+
+        //PWMS1P2H 0; 
+        PWM1S1P2H = 0x0;
+    #endif
     //Clear PWM1_16BIT period interrupt flag
     PIR4bits.PWM1PIF = 0;
     

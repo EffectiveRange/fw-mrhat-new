@@ -27,6 +27,7 @@ extern "C" {
         TASK_CHECK_RTC,
         TASK_CHECK_BQ_IRQ,
         TASK_CHECK_BAT_AVAIL,
+        TASK_START_MES_IBAT,
         TASK_NUM
     }TaskId;
 

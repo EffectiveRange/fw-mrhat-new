@@ -5,6 +5,7 @@
 
 
 #define _XTAL_FREQ 64000000
+// #define _XTAL_FREQ 1000000
 
 void CLOCK_Initialize(void);
 

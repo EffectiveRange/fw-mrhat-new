@@ -37,7 +37,7 @@
 #include <xc.h>
 #include "tmr1.h"
 #include "interrupt.h"
-
+#include "clock.h"
 /**
  * Section: Global Variables Definitions
 */
@@ -65,12 +65,21 @@ void TMR1_Initialize(void)
     T1GCON = 0x0;
     //TGSS T1GPPS; 
     T1GATE = 0x0;
-    //TMRCS FOSC/4; 
-    T1CLK = 0x1;
-    //TMRH 248; 
-    TMR1H = 0xF8;
-    //TMRL 48; 
-    TMR1L = 0x30;
+    #if _XTAL_FREQ == 64000000
+        //TMRCS FOSC/4; 
+        T1CLK = 0x1;
+        //TMRH 248; 
+        TMR1H = 0xF8;
+        //TMRL 48; 
+        TMR1L = 0x30;
+    #elif _XTAL_FREQ == 1000000
+        //TMRCS FOSC; 
+        T1CLK = 0x2;
+        //TMRH 252; 
+        TMR1H = 0xFC;
+        //TMRL 24; 
+        TMR1L = 0x18;
+    #endif
 
     // Load the TMR1 value to reload variable
     timer1ReloadVal=((uint16_t)TMR1H << 8) | TMR1L;
