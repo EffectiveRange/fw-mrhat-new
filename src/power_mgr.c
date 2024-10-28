@@ -12,6 +12,25 @@
 
 extern volatile uint8_t CLIENT_DATA[];
 
+int ReadPartId(){
+    uint8_t val8;
+    // test i2c read, if could not read partid do not check battery return
+    uint8_t i = 0;
+    for (i = 0; i < 10; i++) {
+        // raead partid
+        I2CReadByte(BQ_I2C_ADDR, 0x38, &val8);
+        if (GET_BIT(val8, 3) != 0) {
+            // partid is read
+            return 0;
+        }
+        DelayMS(10);
+    }
+
+    if (GET_BIT(val8, 3) == 0) {
+        return -1;
+    }
+    return 0;
+}
 void PowMgrEnableDisableCharging(volatile TaskDescr* taskd) {
     uint8_t tx[2];
     uint8_t rx[2];
@@ -19,19 +38,7 @@ void PowMgrEnableDisableCharging(volatile TaskDescr* taskd) {
     uint8_t val16;
     int ret = 0;
 
-    // test i2c read, if could not read partid do not check battery return
-    uint8_t i = 0;
-    for (i = 0; i < 10; i++) {
-        // raead partid
-        ret += I2CReadByte(BQ_I2C_ADDR, 0x38, &val8);
-        if (GET_BIT(val8, 3) != 0) {
-            // partid is read
-            break;
-        }
-        DelayMS(10);
-    }
-
-    if (GET_BIT(val8, 3) == 0) {
+    if(ReadPartId()!=0){
         return;
     }
 
@@ -159,7 +166,8 @@ void PowMgrReadIBAT(volatile TaskDescr* taskd) {
         CLIENT_DATA[REG_IBAT_ADDR] = rx[0];
         CLIENT_DATA[REG_IBAT_ADDR + 1] = rx[1];
         ibat_signed = (int16_t)((uint16_t)(rx[1] << 8) | rx[0]);
-        LEDSetToggleTime(1000); //todo p0 remove just for debug that the ibat mes happened
+        LEDSetToggleTime(
+            1000);  // todo p0 remove just for debug that the ibat mes happened
 
         // disable BQ irq handler
         GPIO_Register_BQ_INT_Callback(NULL);
@@ -182,17 +190,26 @@ void PowMgrStartMesIBAT(volatile TaskDescr* taskd) {
     rm_task(TASK_START_MES_IBAT);
     int ret = 0;
 
-//todo mate p0 remove
+    // todo mate p0 remove
     ret += I2CReadByte(BQ_I2C_ADDR, 0x23, &val8);
     CLEAR_BIT(val8, 0);  // BIT2 WATCHDOG irq enable
     ret += I2CWriteByte(BQ_I2C_ADDR, 0x23, val8);
-    //end todo
+    // end todo
 
     // reset watchdog
     // #REG0x16_Charger_Control_1 Register,
     // BIT2 WATCHDOG reset
     ret += I2CReadByte(BQ_I2C_ADDR, 0x16, &val8);
     SET_BIT(val8, 2);  // BIT2 WATCHDOG reset
+
+    //BIT 1:0 WATCHDOG watchdog timer setting
+    // 0h = Disable
+    // 1h = 50s (default)
+    // 2h = 100s
+    // 3h = 200s
+    CLEAR_BIT(val8, 1);
+    SET_BIT(val8, 0);
+
     ret += I2CWriteByte(BQ_I2C_ADDR, 0x16, val8);
 
     // REG0x27_ADC_Function_Disable_0 Register
@@ -209,13 +226,12 @@ void PowMgrStartMesIBAT(volatile TaskDescr* taskd) {
     //  bit3:running average,
     //  bit2:start new conversion
     // bit4:5 ADC_SAMPLE=3 (9bit)
-    tx[1] = rx[0] | (1 << 7) | (1 << 3) | (1 << 2) | (1 << 4) | (1 << 5);
     SET_BIT(val8, 7);  // BIT7 ADC_EN
     SET_BIT(val8, 3);  // BIT3 running average
     SET_BIT(val8, 2);  // BIT2 start new conversion
 
-   CLEAR_BIT(val8, 5);    // BIT5 ADC_SAMPLE 12bit
-   CLEAR_BIT(val8, 4);    // BIT4 ADC_SAMPLE 12bit
+    CLEAR_BIT(val8, 5);  // BIT5 ADC_SAMPLE 12bit
+    CLEAR_BIT(val8, 4);  // BIT4 ADC_SAMPLE 12bit
 
     // SET_BIT(val8, 4);  // BIT4 ADC_SAMPLE 9bit
     // SET_BIT(val8, 5);  // BIT5 ADC_SAMPLE 9bit
@@ -225,7 +241,7 @@ void PowMgrStartMesIBAT(volatile TaskDescr* taskd) {
     CLEAR_BIT(val8, 6);  // BIT6 ADC_RATE
     ret += I2CWriteByte(BQ_I2C_ADDR, 0x26, val8);
 
-    //enable bq int handler
+    // enable bq int handler
     GPIO_Register_BQ_INT_Callback(BQ_INT_PinChanged);
 }
 
@@ -260,15 +276,15 @@ int PowMgrMesIBATOneShot(void) {
     // bit3:running average,
     // bit2:start new conversion
     // bit4:5 ADC_SAMPLE=0 (12bit)
-    SET_BIT(val8, 7);    // BIT7 ADC_EN
-    SET_BIT(val8, 6);    // BIT6 one shot value=0
-    
-   CLEAR_BIT(val8, 5);    // BIT5 ADC_SAMPLE 12bit
-   CLEAR_BIT(val8, 4);    // BIT4 ADC_SAMPLE 12bit
-    
+    SET_BIT(val8, 7);  // BIT7 ADC_EN
+    SET_BIT(val8, 6);  // BIT6 one shot value=0
+
+    CLEAR_BIT(val8, 5);  // BIT5 ADC_SAMPLE 12bit
+    CLEAR_BIT(val8, 4);  // BIT4 ADC_SAMPLE 12bit
+
     // SET_BIT(val8, 5);    // BIT5 ADC_SAMPLE 9bit
     // SET_BIT(val8, 4);    // BIT4 ADC_SAMPLE 9bit
-    
+
     CLEAR_BIT(val8, 3);  // BIT3 single value
     SET_BIT(val8, 2);    // BIT2 start new conversion
     ret += I2CWriteByte(BQ_I2C_ADDR, 0x26, val8);

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "pic18f16q20.h"
 #include "system.h"
 #include "tasks.h"
 
@@ -43,7 +44,19 @@ void suspend_task( TaskId id) {
 }
 
 static void __idle() {
-    CPUDOZEbits.IDLEN = 1;
+    //When the IDLEN bit is clear, the SLEEP instruction will put the device into full Sleep mode. 
+    //When IDLEN is set, the SLEEP instruction will put the device into Idle mode. 
+    //In Idle mode, the CPU and memory operations are halted, but the peripheral clocks continue to run. 
+    //This mode is similar to Doze mode, except that in Idle both the CPU and program memory are shut off.
+    
+      CPUDOZEbits.IDLEN = 1;//go to idle
+//   CPUDOZEbits.IDLEN = 0; //go to sleep 
+
+    //test doze
+//    CPUDOZEbits.DOZE=7; //1:256
+//    CPUDOZEbits.ROI = 1;
+//    CPUDOZEbits.DOZEN = 1;
+//    
     SLEEP();
     __nop();
     __nop();

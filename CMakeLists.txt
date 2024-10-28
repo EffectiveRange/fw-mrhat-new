@@ -57,6 +57,7 @@ set(EXECUTABLE                      ${CMAKE_PROJECT_NAME})
 
 set(SRC_DIR "src/")
 set(SRC_PLAT_DIR "src/platform/")
+set(SRC_EXP_DIR "src/experiments/")
 
 message("CPP_FLAGS src: " ${CPP_FLAGS})
 
@@ -87,6 +88,8 @@ set(sources_SRCS                    # Modified
     ${SRC_PLAT_DIR}/system.c
     ${SRC_PLAT_DIR}/tmr0.c
     ${SRC_PLAT_DIR}/tmr1.c
+
+    ${SRC_EXP_DIR}/exp1_low_power_test.c
 )
 set_source_files_properties(${sources_SRCS} PROPERTIES COMPILE_FLAGS "${CPP_FLAGS}")
 # there is no asm source currently

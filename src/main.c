@@ -3,12 +3,14 @@
 #include "gpio.h"
 #include "i2c1_multimode.h"
 #include "i2c_app.h"
+#include "i2c_client_types.h"
 #include "i2c_regs_data.h"
 #include "led_ctrl.h"
 #include "onoff.h"
 #include "pi_mgr.h"
 #include "power_mgr.h"
 #include "pwm.h"
+#include "stdbool.h"
 #include "system.h"
 #include "tasks.h"
 #include "timers.h"
@@ -34,8 +36,9 @@ void OnOffSwithcPressed(enum ONOFFTypes type) {
             break;
     };
 }
-
+extern void lowpowertest();
 int main() {
+    // lowpowertest();
     // todo move them
     /**
     ANSELx registers
@@ -84,7 +87,6 @@ int main() {
     LEDSetPattern(&sleep_pattern);
     // pi monitor
     PI_RUN_MonitorInit();
-    // power manager
     // PowMgrEnableDisableCharging(NULL);
     // onoff button init
     ONOFF_Initialize();
@@ -93,7 +95,9 @@ int main() {
     GPIO_Register_RTC_IRQ_N_Callback(RTCPinChanged);
     PI_5V_DISA_SetLow();  // enable PI
 
-    while (1) {
+    // power manager
+    ReadPartId();
+    while (0) {
         PI_5V_DISA_SetHigh();
         // MCU_INT_N_SetLow();
         // DelayMS(1000);

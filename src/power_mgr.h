@@ -21,6 +21,7 @@ void PowMgrStartMesIBAT(volatile TaskDescr* taskd);
 void BQ_INT_PinChanged(void);
 void PowMgrReadIBAT(volatile TaskDescr* taskd) ;
 int PowMgrMesIBATOneShot(void);
+int ReadPartId(void);
 #ifdef __cplusplus
 }
 #endif
